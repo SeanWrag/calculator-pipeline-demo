@@ -10,25 +10,25 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                sh 'mvn test'
             }
         }
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t calculator-pipeline-demo .'
+                sh 'docker build -t calculator-pipeline-demo .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                bat 'docker run --rm calculator-pipeline-demo'
+                sh 'docker run --rm calculator-pipeline-demo'
             }
         }
     }
