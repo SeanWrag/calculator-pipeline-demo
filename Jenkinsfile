@@ -1,7 +1,7 @@
 node {
 
     stage('Checkout') {
-        checkout scm
+        git branch: 'main', url: 'https://github.com/SeanWrag/calculator-pipeline-demo.git'
     }
 
     stage('Build') {
