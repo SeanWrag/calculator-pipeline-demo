@@ -6,6 +6,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -14,14 +15,48 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package'
+            }
+        }
+
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Application deployed to STAGING environment successfully.'
+            }
+        }
+
+        stage('Approval for Production') {
+            steps {
+                input message: 'Approve deployment to Production?'
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                echo 'Application deployed to PRODUCTION environment successfully.'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+
+        failure {
+            echo 'Pipeline failed. Please investigate.'
         }
     }
 }
