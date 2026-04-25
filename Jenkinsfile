@@ -1,62 +1,34 @@
-pipeline {
-    agent any
+node {
 
-    tools {
-        maven 'Maven 3.9.12'
+    stage('Checkout') {
+        checkout scm
     }
 
-    stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                bat 'mvn clean compile'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('Package') {
-            steps {
-                bat 'mvn package'
-            }
-        }
-
-        stage('Deploy to Staging') {
-            steps {
-                echo 'Application deployed to STAGING environment successfully.'
-            }
-        }
-
-        stage('Approval for Production') {
-            steps {
-                input message: 'Approve deployment to Production?'
-            }
-        }
-
-        stage('Deploy to Production') {
-            steps {
-                echo 'Application deployed to PRODUCTION environment successfully.'
-            }
-        }
+    stage('Build') {
+        bat 'mvn clean compile'
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully.'
-        }
+    stage('Test') {
+        bat 'mvn test'
+    }
 
-        failure {
-            echo 'Pipeline failed. Please investigate.'
-        }
+    stage('Package') {
+        bat 'mvn package'
+    }
+
+    stage('Deploy to Staging') {
+        echo 'Application deployed to STAGING environment successfully.'
+    }
+
+    stage('Approval for Production') {
+        input 'Approve deployment to Production?'
+    }
+
+    stage('Deploy to Production') {
+        echo 'Application deployed to PRODUCTION environment successfully.'
+    }
+
+    stage('Complete') {
+        echo 'Pipeline completed successfully.'
     }
 }
